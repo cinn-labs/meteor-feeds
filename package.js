@@ -2,7 +2,7 @@ Package.describe({
   name: 'cinn:feeds',
   version: '0.0.1',
   summary: 'Feeds collection and generator helpers for social networks or any events handler',
-  git: '',
+  git: 'https://github.com/cinn-labs/meteor-feeds',
   documentation: 'README.md'
 });
 
