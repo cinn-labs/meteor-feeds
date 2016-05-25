@@ -11,11 +11,13 @@ Package.onUse(function(api) {
   api.versionsFrom('1.3.2.4');
   api.export('Feeds');
   api.export('FeedsHandler');
+  api.export('FeedsComponents');
 
   api.use('meteor-base');
   api.use('ecmascript');
   api.use("matb33:collection-hooks@0.7.15");
 
+  api.addFiles('feeds.components.js', 'client');
   api.addFiles('feeds.collections.js', both);
   api.addFiles('feeds.handler.js', both);
   api.addFiles('feeds.handler.server.js', 'server');
