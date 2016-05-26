@@ -13,6 +13,7 @@ if(Meteor.isServer) {
   }
 
   FeedsHandler.trigger = function(event, userId, customParams) {
+    if(!userId) return console.warn(`[FEEDS] You must provide a userId to save a feed. The feed ${event} was not saved!`);
     const createdAt = new Date();
     Meteor.defer(() => handleEventAndInsertFeed(event, userId, createdAt, customParams));
   };
