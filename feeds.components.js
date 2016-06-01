@@ -10,6 +10,7 @@ FeedsComponents = {
 
   get(feedOreventName) {
     const eventName = _.isString(feedOreventName) ? feedOreventName : feedOreventName.event;
+    if(!this.stack[eventName]) console.warn(`[FEEDS] Feed component ${eventName} not found.`);
     return this.stack[eventName];
   }
 };
