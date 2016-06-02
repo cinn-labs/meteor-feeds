@@ -4,8 +4,8 @@ import Feeds from './feeds.collections';
 import FeedsHandler from './feeds.handler';
 
 if(Meteor.isServer) {
-  FeedsHandler.add = function(event, { data, mail, before, after }) {
-    FeedsHandler.stack[event] = { data, mail, before, after };
+  FeedsHandler.add = function(event, actions) {
+    FeedsHandler.stack[event] = actions;
   };
 
   FeedsHandler.bulkAdd = function (dict) {
@@ -15,11 +15,12 @@ if(Meteor.isServer) {
   FeedsHandler.trigger = function(event, userId, customParams) {
     if(!userId) return console.warn(`[FEEDS] You must provide a userId to save a feed. The feed ${event} was not saved!`);
     const createdAt = new Date();
-    Meteor.defer(() => handleEventAndInsertFeed(event, userId, createdAt, customParams));
+    Meteor.setTimeout(() => handleEventAndInsertFeed(event, userId, createdAt, customParams), 1000);
   };
 
   const defaultFeedsEvents = {
     data() { return {} },
+    involvedUsersIds() { console.log(123); return [] },
     mail() {},
     before() {},
     after() {}
@@ -31,12 +32,14 @@ if(Meteor.isServer) {
     const notificationEventsController = _.defaults(FeedsHandler.stack[event] || {}, defaultFeedsEvents);
     // Data
     const data = eventsParams.data = notificationEventsController.data(eventsParams);
+    // Involved users
+    const involvedUsersIds = eventsParams.involvedUsersIds = _.concat(notificationEventsController.involvedUsersIds(eventsParams), userId);
     // Before
     notificationEventsController.before(eventsParams);
     // Mail
     Meteor.defer(() => notificationEventsController.mail(eventsParams));
     // Insert notification
-    Feeds.insert({ event, userId, docId, createdAt, data });
+    Feeds.insert({ event, userId, docId, createdAt, data, involvedUsersIds });
     // After
     notificationEventsController.after(eventsParams);
   }
