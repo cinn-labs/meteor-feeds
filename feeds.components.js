@@ -8,11 +8,15 @@ FeedsComponents = {
     this.stack[eventName] = Component;
   },
 
-  get(feedOreventName) {
-    const eventName = _.isString(feedOreventName) ? feedOreventName : feedOreventName.event;
+  get(feedOrEventName) {
+    const eventName = _.isString(feedOrEventName) ? feedOrEventName : getEventName(feedOrNamespace.namespace, feedOrNamespace.key);
     if(!this.stack[eventName]) console.warn(`[FEEDS] Feed component ${eventName} not found.`);
     return this.stack[eventName];
   }
 };
+
+function getEventName(namespace, key) {
+  return `${namespace}.${key}`;
+}
 
 export default FeedsComponents;
