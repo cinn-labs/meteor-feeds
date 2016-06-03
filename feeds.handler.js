@@ -1,7 +1,7 @@
 FeedsHandler = {
   stack: {},
   trigger() {},
-  beforeInsertAll() {}
+  beforeInsert() {}
 };
 
 export default FeedsHandler;

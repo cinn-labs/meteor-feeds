@@ -40,7 +40,7 @@ if(Meteor.isServer) {
     Meteor.defer(() => notificationEventsController.mail(eventsParams));
     // Insert notification
     const doc = { event, userId, docId, createdAt, data, involvedUsersIds };
-    FeedsHandler.beforeInsertAll(doc);
+    FeedsHandler.beforeInsert(doc);
     Feeds.insert(doc);
     // After
     notificationEventsController.after(eventsParams);
