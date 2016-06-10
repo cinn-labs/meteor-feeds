@@ -12,10 +12,14 @@ if(Meteor.isServer) {
     _.each(dict, (options, event) => FeedsHandler.add(...event.split('.'), options));
   }
 
+  FeedsHandler.triggerWrapper = function(callback) {
+    Meteor.setTimeout(callback, 1000);
+  };
+
   FeedsHandler.trigger = function(namespace, key, userId, customParams) {
     if(!userId) return console.warn(`[FEEDS] You must provide a userId to save a feed. The feed ${namespace}/${key} was not saved!`);
     const createdAt = new Date();
-    Meteor.setTimeout(() => handleEventAndInsertFeed(namespace, key, userId, createdAt, customParams), 1000);
+    FeedsHandler.triggerWrapper(() => handleEventAndInsertFeed(namespace, key, userId, createdAt, customParams));
   };
 
   const defaultFeedsEvents = {
