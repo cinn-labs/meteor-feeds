@@ -13,7 +13,7 @@ Feeds.find({}); // Return all feeds from DB
 ```
 
 ### Inserting Feeds
-Everytime that you want to add a new feed doc to the DB, you need to call the `FeedsHandler.trigger` method on the server, usually inside a method:
+Everytime that you want to insert a new feed to the DB, you need to call the `FeedsHandler.trigger` method on the server, usually inside a method:
 
 ```js
 import { FeedsHandler } from 'meteor/cinn:meteor-feeds';
@@ -50,16 +50,16 @@ FeedsHandler.trigger(namespace, key, userId, customParams);
 
  - `key`: Secondary indetifier, this field combined with the `key` can be used to customize the feeds presentation and behavior.
 
- - `userId`: Id of the user involved in the action, usualy is the logged user.
+ - `userId`: Id of the main user involved in the action, usualy is the logged user.
 
- - `customParams`: Any data that is relevant for the presentation and behavior of the feed. If is provided a docId, it will be saved on the DB, the other params provided in this objective must be treated individually.
+ - `customParams`: Any data that is relevant for the presentation and behavior of the feed. If is provided a docId, it will be saved on the DB, the other params provided in this object must be treated individually.
 
-**The namespace and the key are saved as separeted fields to facilitate the queries, but they are used together.**
+**The namespace and the key are saved as separeted fields to facilitate the queries, but they are used together as an indetifier.**
 
-### Feeds events life cycle
+## Feeds events life cycle
 **Everytime that we say `feed type`, is the combination of `namespace` and `key`, used to differentiate the feeds.**
 
-Every time the you insert a feed using the `FeedsHandler.trigger` function, it will pass for this events hooks (in the same order):
+When you insert a new feed using the `FeedsHandler.trigger` function, it will pass through these events hooks (in the same order):
  - `data`: This is the place where you can configure custom params to save for each feed type
  - `involvedUsersIds`: Each feed type can have some involvedUsers besides the user that called the trigger.
  - `mail`: If you want to send emails when some feeds is created, this is the place
@@ -96,7 +96,7 @@ Meteor.call('posts.insert', { name: 'Test' });
 Feeds.findOne().data.postTitle; // 'Test'
 ```
 
-The `FeedsHanler.bulkAdd` function is configured in similar way of the meteor methods, each key of the object is the `namespace`.`key`. And each object passed to the feed type name, can receive each of the lifecyles events hooks (data, involvedUsersIds, mail, before, after);
+The `FeedsHanler.bulkAdd` receive an object with a string key and another object as value, each key is the feed type like `namespace.key`. And the value receive an object of the events hooks you want to costumize, like: `data: () => // logic`. It can be any of the hooks (data, involvedUsersIds, mail, before, after);
 
 
 ### Customizing the involvedUsersIds
@@ -130,7 +130,7 @@ The userId passed on the trigger call will be automatically concated with the re
 
 Since the data hook runs before this, you can access the values set to the data on this hook.
 
-The `FeedsHanler.bulkAdd` function is configured in similar way of the meteor methods, each key of the object is the `namespace`.`key`. And each object passed to the feed type name, can receive each of the lifecyles events hooks (data, involvedUsersIds, mail, before, after);
+The `FeedsHanler.bulkAdd` receive an object with a string key and another object as value, each key is the feed type like `namespace.key`. And the value receive an object of the events hooks you want to costumize, like: `data: () => // logic`. It can be any of the hooks (data, involvedUsersIds, mail, before, after);
 
 ### Mail, Before and After
 
@@ -163,4 +163,4 @@ FeedsHandler.bulkAdd({
 ```
 Since the data hook runs before this, you can access the values set to the data on this hook.
 
-The `FeedsHanler.bulkAdd` function is configured in similar way of the meteor methods, each key of the object is the `namespace`.`key`. And each object passed to the feed type name, can receive each of the lifecyles events hooks (data, involvedUsersIds, mail, before, after);
+The `FeedsHanler.bulkAdd` receive an object with a string key and another object as value, each key is the feed type like `namespace.key`. And the value receive an object of the events hooks you want to costumize, like: `data: () => // logic`. It can be any of the hooks (data, involvedUsersIds, mail, before, after);
